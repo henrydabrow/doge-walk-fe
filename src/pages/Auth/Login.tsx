@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import { onLogin } from '../../api/Auth/Auth';
-import { AuthForm } from '../../components/Auth/Auth';
+import { onLogin } from '../../api/Auth/Login';
+import { AuthForm } from '../../components/Auth/Login';
 
-const LoginPage = () => {
+const Login = () => {
 
-  const [{email, password, passwordConfirmation}, setCredentials] = useState({
+  const [{ email, password }, setCredentials] = useState({
     email: '',
     password: '',
-    passwordConfirmation: '',
   })
 
-  const [error, setError] = useState([])
+  const [error, setError] = useState([]);
+
   const login = async (event: React.FormEvent) => {
     event.preventDefault();
     const response = await onLogin({
       email,
-      password,
-      passwordConfirmation
+      password
     })
 
     if(response && response.error) {
@@ -33,8 +32,7 @@ const LoginPage = () => {
         onChange={
           (event) => setCredentials({
           email: event.target.value,
-          password,
-          passwordConfirmation
+          password
         })}
       />
       <label htmlFor="password">Password</label>
@@ -46,20 +44,6 @@ const LoginPage = () => {
           (event) => setCredentials({
             email,
             password: event.target.value,
-            passwordConfirmation
-          })
-        }
-      />
-      <label htmlFor="password">Password confirmation</label>
-      <input
-        placeholder="Password confirmation"
-        type="password"
-        value={passwordConfirmation}
-        onChange={
-          (event) => setCredentials({
-            email,
-            password,
-            passwordConfirmation: event.target.value
           })
         }
       />
@@ -75,4 +59,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage;
+export default Login;
