@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { onLogin } from '../../api/Auth/Auth';
-import { AuthForm } from '../../components/Auth/Auth';
+import { onRegister } from '../../api/Auth/Register';
+import { AuthForm } from '../../components/Auth/Login';
 
-const LoginPage = () => {
-
-  const [{email, password, passwordConfirmation}, setCredentials] = useState({
+const Register = () => {
+  const [{ email, password, passwordConfirmation }, setCredentials] = useState({
     email: '',
     password: '',
-    passwordConfirmation: '',
+    passwordConfirmation: ''
   })
 
-  const [error, setError] = useState([])
-  const login = async (event: React.FormEvent) => {
+  const [error, setError] = useState([]);
+
+  const Register = async (event: React.FormEvent) => {
     event.preventDefault();
-    const response = await onLogin({
+    const response = await onRegister({
       email,
       password,
       passwordConfirmation
@@ -25,7 +25,7 @@ const LoginPage = () => {
   }
 
   return (
-    <AuthForm onSubmit={login}>
+    <AuthForm onSubmit={Register}>
       <label htmlFor="email">email</label>
       <input
         placeholder="email"
@@ -50,7 +50,7 @@ const LoginPage = () => {
           })
         }
       />
-      <label htmlFor="password">Password confirmation</label>
+      <label htmlFor="passwordConfirmation">Password confirmation</label>
       <input
         placeholder="Password confirmation"
         type="password"
@@ -63,7 +63,7 @@ const LoginPage = () => {
           })
         }
       />
-      <button type="submit">Login</button>
+      <button type="submit">Register</button>
       <div>
         {
           error.length > 0 && error.map((e, index) => {
@@ -75,4 +75,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage;
+export default Register;

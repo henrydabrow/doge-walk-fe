@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import LoginPage from './pages/Auth/LoginPage';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
 
 ReactDOM.render(
   <React.StrictMode>
-    <LoginPage />
+    <Login />
+    <Register />
   </React.StrictMode>,
   document.getElementById('root')
 );
