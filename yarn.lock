@@ -1655,7 +1655,7 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@tailwindcss/postcss7-compat@npm:@tailwindcss/postcss7-compat", "tailwindcss@npm:@tailwindcss/postcss7-compat":
+"@tailwindcss/postcss7-compat@^2.1.2", "tailwindcss@npm:@tailwindcss/postcss7-compat":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@tailwindcss/postcss7-compat/-/postcss7-compat-2.1.2.tgz#4ae2a3a3c05622ee04307997b0f8bea5c8dbc2b6"
   integrity sha512-bH2kw6uyqLnDMP8wzDUsis5ovrsRzfHEyiL1McADvqlW54g6y0KVHX1xzO7PH8Fl5s0Sq8vDOAp4+3V8MEcZ9g==
@@ -2649,18 +2649,6 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-autoprefixer@^10.2.5:
-  version "10.2.5"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.2.5.tgz#096a0337dbc96c0873526d7fef5de4428d05382d"
-  integrity sha512-7H4AJZXvSsn62SqZyJCP+1AWwOuoYpUfK6ot9vm0e87XD6mT8lDywc9D9OTJPMULyGcvmIxzTAMeG2Cc+YX+fA==
-  dependencies:
-    browserslist "^4.16.3"
-    caniuse-lite "^1.0.30001196"
-    colorette "^1.2.2"
-    fraction.js "^4.0.13"
-    normalize-range "^0.1.2"
-    postcss-value-parser "^4.1.0"
-
 autoprefixer@^9, autoprefixer@^9.6.1:
   version "9.8.6"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.8.6.tgz#3b73594ca1bf9266320c5acf1588d74dea74210f"
@@ -3131,7 +3119,7 @@ browserslist@4.14.2:
     escalade "^3.0.2"
     node-releases "^1.1.61"
 
-browserslist@^4.0.0, browserslist@^4.12.0, browserslist@^4.14.5, browserslist@^4.16.3, browserslist@^4.16.4, browserslist@^4.6.2, browserslist@^4.6.4:
+browserslist@^4.0.0, browserslist@^4.12.0, browserslist@^4.14.5, browserslist@^4.16.4, browserslist@^4.6.2, browserslist@^4.6.4:
   version "4.16.5"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.16.5.tgz#952825440bca8913c62d0021334cbe928ef062ae"
   integrity sha512-C2HAjrM1AI/djrpAUU/tr4pml1DqLIzJKSLDBXBrNErl9ZCCTXdhwxdJjYc16953+mBWf7Lw+uUJgpgb8cN71A==
@@ -3326,11 +3314,6 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, can
   version "1.0.30001218"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001218.tgz#9b44f6ed16f875db6373e2debd4d14a07359002f"
   integrity sha512-0ASydOWSy3bB88FbDpJSTt+PfDwnMqrym3yRZfqG8EXSQ06OZhF+q5wgYP/EN+jJMERItNcDQUqMyNjzZ+r5+Q==
-
-caniuse-lite@^1.0.30001196:
-  version "1.0.30001219"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001219.tgz#5bfa5d0519f41f993618bd318f606a4c4c16156b"
-  integrity sha512-c0yixVG4v9KBc/tQ2rlbB3A/bgBFRvl8h8M4IeUbqCca4gsiCfvtaheUssbnux/Mb66Vjz7x8yYjDgYcNQOhyQ==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -5339,11 +5322,6 @@ forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
-
-fraction.js@^4.0.13:
-  version "4.0.13"
-  resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.0.13.tgz#3c1c315fa16b35c85fffa95725a36fa729c69dfe"
-  integrity sha512-E1fz2Xs9ltlUp+qbiyx9wmt2n9dRzPsS11Jtdb8D2o+cC7wr9xkkKsVKJuBX0ST+LVS+LhLO+SbLJNtfWcJvXA==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -9153,7 +9131,7 @@ postcss@^7, postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17, po
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-postcss@^8.1.0, postcss@^8.2.1, postcss@^8.2.13:
+postcss@^8, postcss@^8.1.0, postcss@^8.2.1:
   version "8.2.13"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.2.13.tgz#dbe043e26e3c068e45113b1ed6375d2d37e2129f"
   integrity sha512-FCE5xLH+hjbzRdpbRb1IMCvPv9yZx2QnDarBEYSN0N0HYk+TcXsEhwdFcFb+SRWOKzKGErhIEbBK2ogyLdTtfQ==
