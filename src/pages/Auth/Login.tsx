@@ -1,62 +1,65 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Formik, Form } from 'formik';
 import { onLogin } from '../../api/Auth/Login';
-import { AuthForm } from '../../components/Auth/Login';
+import Button from '../../components/atoms/Button'
+import InputField from '../../components/atoms/InputField'
 
-const Login = () => {
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
 
-  const [{ email, password }, setCredentials] = useState({
-    email: '',
-    password: '',
-  })
-
+const LoginFrom = () => {
   const [error, setError] = useState([]);
 
-  const login = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const response = await onLogin({
-      email,
-      password
-    })
+  const initialValues: LoginFormValues = {
+    email: '',
+    password: ''
+  };
 
-    if(response && response.error) {
-      setError(response.error);
+  const loginUser = async ( values: LoginFormValues, resetForm: Function ) => {
+    const response = await onLogin(values);
+
+    if (response.error) {
+      console.log(response.error);
+    } else {
+      resetForm({});
     }
   }
 
-  return (
-    <AuthForm onSubmit={login}>
-      <label htmlFor="email">email</label>
-      <input
-        placeholder="email"
-        value={email}
-        onChange={
-          (event) => setCredentials({
-          email: event.target.value,
-          password
-        })}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={
-          (event) => setCredentials({
-            email,
-            password: event.target.value,
-          })
-        }
-      />
-      <button type="submit">Login</button>
-      <div>
-        {
-          error.length > 0 && error.map((e, index) => {
-            return <p key={index}>{e}</p>
-          })
-        }
+  return(
+    <div className="
+      m-6 max-w-xs overflow-auto
+      block justify-center
+      border-2 rounded-md border-yellow-200
+      bg-yellow-50"
+    >
+      <div className="mx-14 my-6">
+        <h1 className="text-2xl mx-5 my-6 font-mono text-blue-400">login page</h1>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={(values: LoginFormValues, actions) => {
+            loginUser(values, actions.resetForm);
+          }}
+        >
+          <Form>
+            <InputField
+              name='email'
+              placeholder='email'
+            />
+            <InputField
+              name='password'
+              placeholder='password'
+              type='password'
+            />
+            <div className="m-6">
+              <Button label="login"/>
+            </div>
+          </Form>
+        </Formik>
       </div>
-    </AuthForm>
+    </div>
   )
 }
 
-export default Login;
+export default LoginFrom;
