@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { Formik, Form } from 'formik';
 import { onRegister } from '../../api/Auth/Register';
-import { AuthForm } from '../../components/Auth/Login';
+import Button from '../../components/atoms/Button'
+import InputField from '../../components/atoms/InputField'
 
 const Register = () => {
-  const [{ email, password, passwordConfirmation }, setCredentials] = useState({
+  interface IUser {
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+
+  }
+
+  const [{ email, password, passwordConfirmation }, setCredentials] = useState<IUser>({
     email: '',
     password: '',
     passwordConfirmation: ''
@@ -24,54 +33,41 @@ const Register = () => {
     }
   }
 
-  return (
-    <AuthForm onSubmit={Register}>
-      <label htmlFor="email">email</label>
-      <input
-        placeholder="email"
-        value={email}
-        onChange={
-          (event) => setCredentials({
-          email: event.target.value,
-          password,
-          passwordConfirmation
-        })}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={
-          (event) => setCredentials({
-            email,
-            password: event.target.value,
-            passwordConfirmation
-          })
-        }
-      />
-      <label htmlFor="passwordConfirmation">Password confirmation</label>
-      <input
-        placeholder="Password confirmation"
-        type="password"
-        value={passwordConfirmation}
-        onChange={
-          (event) => setCredentials({
-            email,
-            password,
-            passwordConfirmation: event.target.value
-          })
-        }
-      />
-      <button type="submit">Register</button>
-      <div>
-        {
-          error.length > 0 && error.map((e, index) => {
-            return <p key={index}>{e}</p>
-          })
-        }
+  return(
+    <div className="
+      m-6 max-w-xs overflow-auto
+      block justify-center
+      border-2 rounded-md border-yellow-200
+      bg-yellow-50"
+    >
+      <div className="mx-14 my-6">
+        <h1 className="text-2xl mx-5 my-6 font-mono text-blue-400">login page</h1>
+        <Formik
+          initialValues={{ email: '', password: '', passwordConfirmation: ''}}
+          onSubmit={onRegister}
+        >
+          <Form>
+            <InputField
+              name='email'
+              placeholder='email'
+            />
+            <InputField
+              name='password'
+              placeholder='password'
+              type='password'
+            />
+            <InputField
+              name='password_confirmation'
+              placeholder='password confirmation'
+              type='password'
+            />
+            <div className="m-6">
+              <Button label="register"/>
+            </div>
+          </Form>
+        </Formik>
       </div>
-    </AuthForm>
+    </div>
   )
 }
 
