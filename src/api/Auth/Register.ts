@@ -4,6 +4,12 @@ export interface Credentials {
   email: string;
   password: string;
   passwordConfirmation: string;
+  firstName?: string;
+  lastName?: string;
+  city?: string;
+  country?: string;
+  postalCode?: string;
+  gender?: string;
 }
 
 export const onRegister = async (data: Credentials) => {
@@ -16,7 +22,6 @@ export const onRegister = async (data: Credentials) => {
   try {
     const { data: response } = await Axios.request(requestConfig);
 
-    console.log(response)
     return response
   } catch (e) {
     return { error: e.response.data.errors }
