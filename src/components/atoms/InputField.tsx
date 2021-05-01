@@ -1,4 +1,3 @@
-import React from 'react';
 import { Field } from 'formik';
 
 export interface Props {
@@ -13,7 +12,7 @@ const InputField = ({ name, placeholder, type, border }: Props) => (
     name={name}
     placeholder={placeholder || ''}
     type={type || 'text'}
-    className={"block h-10 w-48 my-4 p-4\
+    className={"block h-10 w-60 my-4 p-4\
                 font-mono text-xs\
                 outline-none\
                 border-2 rounded-md\

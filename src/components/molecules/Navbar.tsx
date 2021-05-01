@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom"
 
+const linkStyling = "p-2 border-2 border-purple-50 hover:border-purple-200 hover:text-gray-800 rounded-md";
+
 const Navbar = () => (
-  <nav className="flex justify-between item-center h-24 bg-white-100 text-black-400 hover:bg-gray-50 relative font-mono font-medium text-xl">
-    <Link to="/" className="pl-8 pt-8 text-2xl animate-pulse-slow">Jeety</Link>
-    <div className="px-4 pt-6 pr-10 cursor-pointer md:hidden">
+  <nav className="flex justify-between m-2 h-16 border-2 border-purple-200 rounded-md \
+                  bg-purple-50 text-gray-600 font-mono font-medium text-xl">
+    <Link to="/" className="pl-8 pt-4 hover:text-gray-800 animate-pulse-slow">jeety</Link>
+    <div className="px-4 pt-4 pr-8 cursor-pointer md:hidden">
       <svg
-        className="w-11 h-11"
+        className="w-7 h-7"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -19,10 +22,10 @@ const Navbar = () => (
         />
       </svg>
     </div>
-    <div className="pr-10 pt-9 md:block hidden">
-      <Link className="p-4" to="/">home</Link>
-      <Link className="p-4" to="/login">login</Link>
-      <Link className="p-4" to="/register">register</Link>
+    <div className="pr-8 pt-4 md:block hidden">
+      <Link className={linkStyling} to="/">home</Link>
+      <Link className={linkStyling} to="/login">login</Link>
+      <Link className={linkStyling} to="/register">register</Link>
     </div>
   </nav>
 )
