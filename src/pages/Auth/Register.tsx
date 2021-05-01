@@ -57,7 +57,7 @@ const Register = () => {
           onAnimationEnd={() => setFormAnimation(false)}
     >
       <div className="mx-10 my-6">
-        <h1 className="text-2xl mx-11 my-6 font-mono text-blue-400">login page</h1>
+        <h1 className="text-2xl mx-16 my-6 font-mono text-blue-400">register</h1>
         <Formik
           initialValues={initialValues}
           onSubmit={(values: RegisterFromValues, actions) => { registerUser(values, actions.resetForm) }}
