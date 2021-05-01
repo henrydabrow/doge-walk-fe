@@ -4,17 +4,17 @@ import { onLogin } from '../../api/Auth/Login';
 import Button from '../../components/atoms/Button'
 import InputField from '../../components/atoms/InputField'
 
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
-
-const LoginFrom = () => {
+const Login = () => {
   const [error, setError] = useState([]);
+
+  interface LoginFormValues {
+    email: string;
+    password: string;
+  }
 
   const initialValues: LoginFormValues = {
     email: '',
-    password: ''
+    password: '',
   };
 
   const loginUser = async ( values: LoginFormValues, resetForm: Function ) => {
@@ -62,4 +62,4 @@ const LoginFrom = () => {
   )
 }
 
-export default LoginFrom;
+export default Login;

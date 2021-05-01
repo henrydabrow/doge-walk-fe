@@ -1,77 +1,90 @@
-import React, { useState } from 'react';
+import { useState } from 'react'
+import { Formik, Form } from 'formik';
 import { onRegister } from '../../api/Auth/Register';
-import { AuthForm } from '../../components/Auth/Login';
+import Button from '../../components/atoms/Button'
+import InputField from '../../components/atoms/InputField'
 
 const Register = () => {
-  const [{ email, password, passwordConfirmation }, setCredentials] = useState({
+  const [error, setError] = useState([]);
+  const [formColor, setFormColor] = useState("bg-yellow-50 border-yellow-200")
+  const [inputBorder, setInputBorder] = useState("border-yellow-400")
+
+  interface RegisterFromValues {
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+  }
+
+  const initialValues: RegisterFromValues = {
     email: '',
     password: '',
-    passwordConfirmation: ''
-  })
+    passwordConfirmation: '',
+  }
 
-  const [error, setError] = useState([]);
-
-  const Register = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const response = await onRegister({
-      email,
-      password,
-      passwordConfirmation
-    })
+  const registerUser = async ( values: RegisterFromValues, resetForm: Function ) => {
+    const response = await onRegister(values);
 
     if(response && response.error) {
+      console.log(response.error.join("\n"));
       setError(response.error);
+      setFormColor("bg-red-50 border-red-200");
+      setInputBorder("border-red-400");
+    } else {
+      resetForm({});
     }
   }
 
-  return (
-    <AuthForm onSubmit={Register}>
-      <label htmlFor="email">email</label>
-      <input
-        placeholder="email"
-        value={email}
-        onChange={
-          (event) => setCredentials({
-          email: event.target.value,
-          password,
-          passwordConfirmation
-        })}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={
-          (event) => setCredentials({
-            email,
-            password: event.target.value,
-            passwordConfirmation
-          })
-        }
-      />
-      <label htmlFor="passwordConfirmation">Password confirmation</label>
-      <input
-        placeholder="Password confirmation"
-        type="password"
-        value={passwordConfirmation}
-        onChange={
-          (event) => setCredentials({
-            email,
-            password,
-            passwordConfirmation: event.target.value
-          })
-        }
-      />
-      <button type="submit">Register</button>
-      <div>
-        {
-          error.length > 0 && error.map((e, index) => {
-            return <p key={index}>{e}</p>
-          })
-        }
+  return(
+    <div className={"m-6 max-w-xs overflow-auto\
+                     block justify-center\
+                     border-2 rounded-md  " + formColor}
+    >
+      <div className="mx-14 my-6">
+        <h1 className="text-2xl mx-5 my-6 font-mono text-blue-400">login page</h1>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={(values: RegisterFromValues, actions) => {
+            registerUser(values, actions.resetForm)
+          }}
+        >
+          <Form>
+            <InputField
+              name='email'
+              placeholder='email'
+              border={inputBorder}
+            />
+            <InputField
+              name='password'
+              placeholder='password'
+              type='password'
+              border={inputBorder}
+            />
+            <InputField
+              name='passwordConfirmation'
+              placeholder='password confirmation'
+              type='password'
+              border={inputBorder}
+            />
+            <div>
+              {
+                error.length > 0 && error.map((e, index) => {
+                  return(
+                    <p
+                      key={index}
+                      className="m-2 font-mono text-xs"
+                    >{e}
+                    </p>
+                  )
+                })
+              }
+            </div>
+            <div className="my-6">
+              <Button label="register"/>
+            </div>
+          </Form>
+        </Formik>
       </div>
-    </AuthForm>
+    </div>
   )
 }
 
