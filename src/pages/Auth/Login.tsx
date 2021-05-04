@@ -5,6 +5,7 @@ import { onLogin } from '../../api/Auth/Login';
 import Button from '../../components/atoms/Button'
 import InputField from '../../components/atoms/InputField'
 import InputFieldError from '../../components/atoms/InputFieldError'
+import { setAccessToken } from '../../accessToken'
 
 const Login = () => {
   const [error, setError] = useState([]);
@@ -38,6 +39,7 @@ const Login = () => {
       setFormColor("bg-red-50 border-red-200");
       setInputBorder("border-red-400");
     } else {
+      setAccessToken(response.token);
       resetForm({});
     }
   }
