@@ -11,12 +11,14 @@ const Home = () => {
       process.env.REACT_APP_API_BASE_URL + '/pets',
       { headers: {'Authorization': `Bearer:${accessToken}`} }
     ).then(res => {
-      setPets(res.data.data);
+      setPets(res.data.pets);
     })
   }, [])
 
   const element = pets.map(pet => {
-    return <p>{pet.name}</p>
+    return(
+      <p key={pet.id}>{pet.name}</p>
+    )
   })
 
   return(<div>
