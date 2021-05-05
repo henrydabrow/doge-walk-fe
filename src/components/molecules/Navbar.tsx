@@ -12,34 +12,20 @@ const Navbar = () => {
 
       <div className="flex">
         { expanded ?
-          <div className="pt-4 md:block md:hidden">
-            <Link className={`${linkStyling} text-sm`} to="/">home</Link>
+          <div className="pt-4 md:hidden">
+            <Link className={`${linkStyling} text-sm`} to="/">pets</Link>
             <Link className={`${linkStyling} text-sm`} to="/login">login</Link>
             <Link className={`${linkStyling} text-sm`} to="/register">register</Link>
           </div> : null
         }
-        <div
-          className="px-4 pt-4 pr-8 cursor-pointer md:hidden"
-          onClick={() => {setExpanded(!expanded)}}
-        >
-          <svg
-            className="w-7 h-7"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.7}
-              d="M4 6h16M4 12h8m-8 6h16"
-            />
+        <div className="px-4 pt-4 pr-8 cursor-pointer md:hidden" onClick={() => {setExpanded(!expanded)}}>
+          <svg className="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M4 6h16M4 12h8m-8 6h16" />
           </svg>
         </div>
       </div>
       <div className="pr-8 pt-4 md:block hidden">
-        <Link className={linkStyling} to="/">home</Link>
+        <Link className={linkStyling} to="/">pets</Link>
         <Link className={linkStyling} to="/login">login</Link>
         <Link className={linkStyling} to="/register">register</Link>
       </div>
