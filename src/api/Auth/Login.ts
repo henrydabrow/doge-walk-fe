@@ -1,22 +1,19 @@
-import Axios, { AxiosRequestConfig } from 'axios';
-
 export interface Credentials {
   email: string;
   password: string;
 }
 
-export const onLogin = async (data: Credentials) => {
-  const requestConfig: AxiosRequestConfig = {
-    method: 'post',
-    url: process.env.REACT_APP_API_BASE_URL + '/users/login',
-    data: data
-  }
+export const LoginRequest = async (data: Credentials) => {
+  const url = process.env.REACT_APP_API_BASE_URL + '/users/login';
 
-  try {
-    const { data: response } = await Axios.request(requestConfig);
+  const response = await fetch(url, {
+    method: "POST",
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+  }).then(res => res.json())
 
-    return response
-  } catch (e) {
-    return { error: e.response.data.errors }
-  }
+  return response;
 }

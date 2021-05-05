@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup'
-import { onLogin } from '../../api/Auth/Login';
+import { LoginRequest } from '../../api/Auth/Login';
 import Button from '../../components/atoms/Button'
 import InputField from '../../components/atoms/InputField'
 import InputFieldError from '../../components/atoms/InputFieldError'
+import { setAccessToken } from '../../accessToken'
 
 const Login = () => {
+  let history = useHistory();
   const [error, setError] = useState([]);
   const [formAnimation, setFormAnimation] = useState(false);
   const [formColor, setFormColor] = useState("bg-yellow-50 border-yellow-200")
@@ -30,14 +33,16 @@ const Login = () => {
   });
 
   const loginUser = async ( values: LoginFormValues, resetForm: Function ) => {
-    const response = await onLogin(values);
+    const response = await LoginRequest(values);
 
-    if (response.error) {
-      setError(response.error);
+    if (response.errors) {
+      setError(response.errors);
       setFormAnimation(true);
       setFormColor("bg-red-50 border-red-200");
       setInputBorder("border-red-400");
     } else {
+      setAccessToken(response.token);
+      history.push('/');
       resetForm({});
     }
   }
