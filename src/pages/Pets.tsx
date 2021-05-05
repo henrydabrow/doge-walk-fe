@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '../accessToken';
 
-const Home = () => {
+const Pets = () => {
   const accessToken = getAccessToken();
   const [pets, setPets] = useState<any[]>([]);
 
@@ -26,4 +26,4 @@ const Home = () => {
   </div>)
 }
 
-export default Home;
+export default Pets;
