@@ -1,21 +1,27 @@
-import './App.css';
-import Navbar from './components/molecules/Navbar';
-import Pets from './pages/Pets';
-import Login from './pages/Auth/Login';
-import Register from './pages/Auth/Register';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { setAccessToken } from './accessToken';
+import { Routes } from './Routes';
 
-function App() {
-  return (
-    <BrowserRouter>
-      <Navbar/>
-      <Switch>
-        <Route path='/login' component={Login}/>
-        <Route path='/register' component={Register}/>
-        <Route path='/' component={Pets}/>
-      </Switch>
-    </BrowserRouter>
-  );
+const App = () => {
+  const url = process.env.REACT_APP_API_BASE_URL + '/auth/refresh';
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(url, {
+      method: "POST",
+      credentials: "include"
+    }).then(async x => {
+      const { token } = await x.json() || "";
+      setAccessToken(token);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
+
+  return <Routes />;
 }
 
 export default App;
