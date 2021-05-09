@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between m-2 h-16 border-2 border-purple-200 rounded-md \
                     bg-purple-50 text-gray-600 font-mono font-medium text-xl">
-      <Link to="/" className="pl-8 pt-4 hover:text-gray-800 animate-pulse-slow">jeety</Link>
+      <Link to="/" className="pl-8 pt-4 hover:text-gray-800 animate-pulse-slow">doge walk</Link>
 
       <div className="flex">
         { expanded ?
