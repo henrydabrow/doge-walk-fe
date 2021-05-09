@@ -1,29 +1,54 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '../accessToken';
 
 const Pets = () => {
+  interface Data <T> {
+    pets: T[] | [];
+  }
+
+  interface Pet {
+    id: string;
+    name: string;
+  }
+
   const accessToken = getAccessToken();
-  const [pets, setPets] = useState<any[]>([]);
+  const url = process.env.REACT_APP_API_BASE_URL + '/pets';
+
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<Data<Pet>>({pets: [{id: '', name: ''}]});
+
 
   useEffect(() => {
-    axios.get(
-      process.env.REACT_APP_API_BASE_URL + '/pets',
-      { headers: {'Authorization': `Bearer:${accessToken}`} }
-    ).then(res => {
-      setPets(res.data.pets);
+    fetch(url,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {'Authorization': `Bearer:${accessToken}`}
+      }
+    )
+    .then(res => res.json() || [])
+    .then(data => {
+      setData(data);
+      setLoading(false);
     })
   }, [])
 
-  const element = pets.map(pet => {
-    return(
-      <p key={pet.id}>{pet.name}</p>
-    )
-  })
+  if (data.pets) {
+    const element = data.pets.map((pet: Pet) => {
+      return(
+        <p key={pet.id}>{pet.name}</p>
+      )
+    })
 
-  return(<div>
-    {element}
-  </div>)
+    return(<div>
+      {element}
+    </div>)
+  } else if (loading) {
+    return <div>loading...</div>;
+  } else {
+    return <> </>
+  }
+
 }
 
 export default Pets;
