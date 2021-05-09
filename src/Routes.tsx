@@ -11,7 +11,7 @@ export const Routes = () =>  {
       <Switch>
         <Route path='/login' component={Login}/>
         <Route path='/register' component={Register}/>
-        <Route path='/' component={Pets}/>
+        <Route path='/pets' component={Pets}/>
       </Switch>
     </BrowserRouter>
   );
