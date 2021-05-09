@@ -42,7 +42,8 @@ const Login = () => {
       setInputBorder("border-red-400");
     } else {
       setAccessToken(response.token);
-      history.push('/');
+      sessionStorage.setItem('isAuth', 'true');
+      history.push('/pets');
       resetForm({});
     }
   }
