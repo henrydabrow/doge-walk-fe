@@ -1,30 +1,46 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 import { RegisterRequest } from '../../api/Auth/Register';
-import Button from '../../components/atoms/Button'
-import InputField from '../../components/atoms/InputField'
-import InputFieldError from '../../components/atoms/InputFieldError'
-import { setAccessToken } from '../../accessToken'
+import Button from '../../components/atoms/Button';
+import ExtendedRegistrationForm from '../../components/molecules/ExtendedRegistrationsForm'
+import InputField from '../../components/atoms/InputField';
+import InputFieldError from '../../components/atoms/InputFieldError';
+import { setAccessToken } from '../../accessToken';
 
 const Register = () => {
   let history = useHistory();
   const [error, setError] = useState([]);
   const [formAnimation, setFormAnimation] = useState(false);
-  const [formColor, setFormColor] = useState("bg-yellow-50 border-yellow-200")
-  const [inputBorder, setInputBorder] = useState("border-yellow-400")
+  const [formColor, setFormColor] = useState("bg-yellow-50 border-yellow-200");
+  const [inputBorder, setInputBorder] = useState("border-yellow-400");
+  const [plusTooltip, setPlusTooltip] = useState(false);
+  const [minusTooltip, setMinusTooltip] = useState(false);
+  const [expandForm, setExpandForm] = useState(false);
 
   interface RegisterFromValues {
     email: string;
     password: string;
     passwordConfirmation: string;
+    firstName?: string;
+    lastName?: string;
+    city?: string;
+    country?: string;
+    postalCode?: string;
+    gender?: string;
   }
 
   const initialValues: RegisterFromValues = {
     email: '',
     password: '',
     passwordConfirmation: '',
+    firstName: '',
+    lastName: '',
+    city: '',
+    country: '',
+    postalCode: '',
+    gender: '',
   }
 
   const registrationSchema = Yup.object().shape({
@@ -36,9 +52,10 @@ const Register = () => {
          .matches(/^(?=.*[0-9]).{8,40}\S$/, 'Must contain number!')
          .matches(/^(?=.*[!@#$%^&*()]).{8,40}\S$/, 'Must contain special character!'),
     passwordConfirmation:
-      Yup.string().test('passwordConfirmation',
-                        'Passwords don\'t match!',
-                        function (value) { return this.parent.password === value }),
+      Yup.string().required('Password confirmation required!')
+         .test('passwordConfirmation',
+               'Passwords don\'t match!',
+               function (value) { return this.parent.password === value }),
   });
 
   const registerUser = async ( values: RegisterFromValues, resetForm: Function ) => {
@@ -51,7 +68,8 @@ const Register = () => {
       setInputBorder("border-red-400");
     } else {
       setAccessToken(response.token);
-      history.push('/');
+      sessionStorage.setItem('isAuth', 'true');
+      history.push('/pets');
       resetForm({});
     }
   }
@@ -68,7 +86,7 @@ const Register = () => {
           onSubmit={(values: RegisterFromValues, actions) => { registerUser(values, actions.resetForm) }}
           validationSchema={registrationSchema}
         >
-          {({ errors, touched }) => (
+          {({ errors, touched, handleChange, values, handleSubmit }) => (
             <Form>
               <InputField
                 name='email'
@@ -92,6 +110,39 @@ const Register = () => {
               {errors.passwordConfirmation && touched.passwordConfirmation ?
                 <InputFieldError error={errors.passwordConfirmation}/> : null}
               {error.map((err, index) => (<InputFieldError error={err} key={index}/>))}
+              <div className="mt-2 grid justify-center text-green-600">
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-6 w-6 ${expandForm && "hidden"}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    onMouseEnter={() => { setPlusTooltip(true) }}
+                    onMouseLeave={() => { setPlusTooltip(false) }}
+                    onClick={() => { setExpandForm(true)}}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-6 w-6 ${!expandForm && "hidden"}`}
+                    fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    onMouseEnter={() => { setMinusTooltip(true) }}
+                    onMouseLeave={() => { setMinusTooltip(false) }}
+                    onClick={() => { setExpandForm(false)}}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+              <div className="grid justify-center text-xs mt-2 font-mono text-gray-600">
+                {plusTooltip === true ? "expand registration form" : "" }
+                {minusTooltip === true ? "hide extended registration form" : "" }
+              </div>
+              {expandForm &&
+                <ExtendedRegistrationForm inputBorder={inputBorder} handleChange={handleChange} values={values} />}
               <div className="my-6 mx-7">
                 <Button label="register"/>
               </div>
