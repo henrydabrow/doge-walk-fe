@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const linkStyling = "p-2 border-2 border-purple-50 hover:border-purple-200 hover:text-gray-800 rounded-md";
+
 const Navbar = () => {
+  const linkStyling = "p-2 border-2 border-purple-50 hover:border-purple-200 hover:text-gray-800 rounded-md";
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -13,9 +14,9 @@ const Navbar = () => {
       <div className="flex">
         { expanded ?
           <div className="pt-4 md:hidden">
-            <Link className={`${linkStyling} text-sm`} to="/">pets</Link>
             <Link className={`${linkStyling} text-sm`} to="/login">login</Link>
             <Link className={`${linkStyling} text-sm`} to="/register">register</Link>
+            <Link className={`${linkStyling} text-sm`} to="/pets">pets</Link>
           </div> : null
         }
         <div className="px-4 pt-4 pr-8 cursor-pointer md:hidden" onClick={() => {setExpanded(!expanded)}}>
@@ -25,9 +26,9 @@ const Navbar = () => {
         </div>
       </div>
       <div className="pr-8 pt-4 md:block hidden">
-        <Link className={linkStyling} to="/">pets</Link>
         <Link className={linkStyling} to="/login">login</Link>
         <Link className={linkStyling} to="/register">register</Link>
+        <Link className={linkStyling} to="/pets">pets</Link>
       </div>
     </nav>
   )
