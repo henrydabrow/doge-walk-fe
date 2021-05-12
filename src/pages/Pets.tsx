@@ -121,7 +121,7 @@ const Pets = () => {
                         border={"border-red-400"}
                       />
                     </div>
-                    <div className="my-6 mx-7">
+                    <div className="my-6 mx-12">
                       <Button label="create"/>
                     </div>
                   </Form>
