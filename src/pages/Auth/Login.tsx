@@ -3,10 +3,10 @@ import { useHistory } from "react-router-dom";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup'
 import { LoginRequest } from '../../api/Auth/Login';
-import Button from '../../components/atoms/Button'
-import InputField from '../../components/atoms/InputField'
-import InputFieldError from '../../components/atoms/InputFieldError'
-import { setAccessToken } from '../../accessToken'
+import Button from '../../components/atoms/Button';
+import InputField from '../../components/atoms/InputField';
+import InputFieldError from '../../components/atoms/InputFieldError';
+import { setAccessToken } from '../../accessToken';
 
 const Login = () => {
   let history = useHistory();
@@ -36,13 +36,14 @@ const Login = () => {
     const response = await LoginRequest(values);
 
     if (response.errors) {
+      sessionStorage.setItem('isAuth', 'false');
       setError(response.errors);
       setFormAnimation(true);
       setFormColor("bg-red-50 border-red-200");
       setInputBorder("border-red-400");
     } else {
-      setAccessToken(response.token);
       sessionStorage.setItem('isAuth', 'true');
+      setAccessToken(response.token);
       history.push('/pets');
       resetForm({});
     }
@@ -65,14 +66,14 @@ const Login = () => {
               <InputField
                 name='email'
                 placeholder='email'
-                border={inputBorder}
+                opts={inputBorder}
               />
               {errors.email && touched.email ? <InputFieldError error={errors.email}/> : null}
               <InputField
                 name='password'
                 placeholder='password'
                 type='password'
-                border={inputBorder}
+                opts={inputBorder}
               />
               {errors.password && touched.password ? <InputFieldError error={errors.password}/> : null}
               {error.map((err, index) => (<InputFieldError error={err} key={index}/>))}

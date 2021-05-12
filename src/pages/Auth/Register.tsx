@@ -91,21 +91,21 @@ const Register = () => {
               <InputField
                 name='email'
                 placeholder='email'
-                border={inputBorder}
+                opts={inputBorder}
               />
               {errors.email && touched.email ? <InputFieldError error={errors.email}/> : null}
               <InputField
                 name='password'
                 placeholder='password'
                 type='password'
-                border={inputBorder}
+                opts={inputBorder}
               />
               {errors.password && touched.password ? <InputFieldError error={errors.password}/> : null}
               <InputField
                 name='passwordConfirmation'
                 placeholder='password confirmation'
                 type='password'
-                border={inputBorder}
+                opts={inputBorder}
               />
               {errors.passwordConfirmation && touched.passwordConfirmation ?
                 <InputFieldError error={errors.passwordConfirmation}/> : null}

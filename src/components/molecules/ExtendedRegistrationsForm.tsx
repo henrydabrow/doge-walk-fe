@@ -13,27 +13,27 @@ const ExtendedRegistrationForm = ({ inputBorder, handleChange, values }: Props) 
       <InputField
         name='firstName'
         placeholder='first name'
-        border={inputBorder}
+        opts={inputBorder}
       />
       <InputField
         name='lastName'
         placeholder='last name'
-        border={inputBorder}
+        opts={inputBorder}
       />
       <InputField
         name='city'
         placeholder='city'
-        border={inputBorder}
+        opts={inputBorder}
       />
       <InputField
         name='country'
         placeholder='country'
-        border={inputBorder}
+        opts={inputBorder}
       />
       <InputField
         name='postalCode'
         placeholder='postal code'
-        border={inputBorder}
+        opts={inputBorder}
       />
       <Dropdown
         handleChange={handleChange}
