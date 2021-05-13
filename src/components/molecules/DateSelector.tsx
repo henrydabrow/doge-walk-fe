@@ -29,8 +29,8 @@ const DateSelector = ({
   <div className="flex justify-between">
     <div>
       <select
-        name={name}
-        value={values}
+        name='day'
+        key='day'
         onChange={handleChange}
         className={`h-10 w-20\
                     font-mono text-xs text-gray-500\
@@ -40,14 +40,19 @@ const DateSelector = ({
                     focus:border-red-400 focus:bg-red-100 focus:placeholder-gray-500 ` + border}
       >
         <option value="" label="day" className={"text-gray-500"}/>
-        { Array.from(Array(30).keys()).map((day) => <option value={(day + 1).toString()} label={(day + 1).toString()} /> ) }
+        { Array.from(Array(30).keys()).map((day) => {
+          <option
+            value={(day + 1).toString()}
+            label={(day + 1).toString()}
+            key={(day + 1).toString()} />
+        })}
       </select>
     </div>
 
     <div>
       <select
-        name={name}
-        value={values}
+        name='month'
+        key='month'
         onChange={handleChange}
         className={`h-10 w-24\
                     font-mono text-xs text-gray-500\
@@ -57,16 +62,22 @@ const DateSelector = ({
                     focus:border-red-400 focus:bg-red-100 focus:placeholder-gray-500 ` + border}
       >
         <option value="" label="month" className={"text-gray-500"}/>
-        { months.map(({ value, label }, index) => <option value={value} label={label} /> ) }
+        { months.map(({ value, label }, index) =>
+          <option
+            value={value}
+            label={label}
+            key={index}
+          />
+        )}
       </select>
     </div>
 
     <div>
       <select
-        name={name}
-        value={values}
-        onChange={handleChange}
-        className={`h-10 w-24\
+        name='year'
+        key='year'
+
+        onChange={handleChange}        className={`h-10 w-24\
                     font-mono text-xs text-gray-500\
                     outline-none\
                     border-2 rounded-md\
@@ -74,7 +85,13 @@ const DateSelector = ({
                     focus:border-red-400 focus:bg-red-100 focus:placeholder-gray-500 ` + border}
       >
         <option value="" label="year" className={"text-gray-500"}/>
-        { Array.from(Array(30).keys()).map((day) => <option value={(2021 - day).toString()} label={(2021 - day).toString()} /> ) }
+        { Array.from(Array(30).keys()).map((day) =>
+          <option
+            value={(2021 - day).toString()}
+            label={(2021 - day).toString()}
+            key={(2021 - day).toString()}
+          />
+        )}
       </select>
     </div>
   </div>
