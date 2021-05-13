@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { getAccessToken } from '../accessToken';
 import { Formik, Form } from 'formik';
 import Button from '../components/atoms/Button';
@@ -12,9 +13,17 @@ const Pets = () => {
     meta: M;
   }
 
-  interface Pet {
+  interface Pet<O> {
     id: string;
     name: string;
+    kind: string;
+    breed: string;
+    owner: O;
+  }
+
+  interface Owner {
+    firstName: string;
+    city: string;
   }
 
   interface Meta {
@@ -25,27 +34,30 @@ const Pets = () => {
     total_count: string;
   }
 
-  interface LoginFormValues {
-    email: string;
-    password: string;
+  interface CreatePetFormValues {
+    name: string;
+    kind: string;
+    breed: string;
     day: string;
     month: string;
     year: string;
   }
 
+  let history = useHistory();
   const accessToken = getAccessToken();
   const url = process.env.REACT_APP_API_BASE_URL + '/pets';
 
   const [loading, setLoading] = useState(true);
-  const [counter, setCounter] = useState(0);
-  const [data, setData] = useState<Data<Pet,Meta>>({
-    pets: [{ id: '', name: '' }],
+  const [kind, setKind] = useState('');
+  const [data, setData] = useState<Data<Pet<Owner>,Meta>>({
+    pets: [{ id: '', name: '', kind: '', breed: '', owner: { firstName: '', city: ''} }],
     meta: { count: '', page: '', per_page: '', page_count: '', total_count: '' }
   });
 
-  const initialValues: LoginFormValues = {
-    email: '',
-    password: '',
+  const initialValues: CreatePetFormValues = {
+    name: '',
+    kind: kind,
+    breed: '',
     day: '',
     month: '',
     year: '',
@@ -66,15 +78,34 @@ const Pets = () => {
     })
   }, [])
 
+  const createPet = async (data: CreatePetFormValues) => {
+    const url = process.env.REACT_APP_API_BASE_URL + '/pets';
+
+    const response = await fetch(url, {
+      method: "POST",
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer:${accessToken}`
+      },
+      body: JSON.stringify(data),
+    }).then(res => res.json())
+
+    if (response) {
+      history.go(0);
+    }
+    return response;
+  }
+
   if (data.pets) {
-    console.log(data.meta);
-    const element = data.pets.map((pet: Pet) => {
-      console.log(pet);
+    const element = data.pets.map((pet: Pet<Owner>) => {
       return(
-        <div className="mx-2 h-12 border-2 border-purple-200 rounded-md">
-          <div key={pet.id}>
-            {pet.name}
+        <div className="mx-2 h-36 border-2 border-purple-200 rounded-md">
+          <div className="m-2 text-xs font-mono">
+            <div key={pet.id}> Hi my name is <b>{pet.name}</b>, I am a {pet.breed} {pet.kind}.
+              My owner's name is {pet.owner.firstName} {"together we live in " && pet.owner.city }
             </div>
+          </div>
         </div>
       )
     })
@@ -86,14 +117,16 @@ const Pets = () => {
             {element}
           </div>
           <div className="grid justify-end col-span-5 mx-2">
-          <div className={`my-10 max-w-sm overflow-auto block justify-center border-2 rounded-md bg-green-50 border-green-200`}>
-            <div className="mx-10 my-6">
+          <div className="my-10 max-w-sm h-xl overflow-auto block justify-center border-2 rounded-md bg-green-50 border-green-20">
+            <div className="mx-10">
               <h1 className="grid justify-center text-2xl my-6 font-mono text-purple-400">{"add pet"}</h1>
               <Formik
                 initialValues={initialValues}
-                onSubmit={() => {console.log('x')}}
+                onSubmit={(values: CreatePetFormValues) => {
+                  createPet(values)
+                }}
               >
-                {({ errors, touched, handleChange, values }) => (
+                {({ handleChange, values }) => (
                   <Form>
                     <InputField
                       name='name'
@@ -101,10 +134,22 @@ const Pets = () => {
                       opts={"border-green-400 w-72"}
                     />
                     <div className="flex justify-between">
-                      <div>
-                        <SelectButton label="dog"/>
+                      <div
+                        onClick={() => {
+                          setKind("dog")
+                          values.kind = "dog"
+                        }}
+                      >
+                        <SelectButton
+                          label="dog"
+                        />
                       </div>
-                      <div>
+                      <div
+                        onClick={() => {
+                          setKind("cat")
+                          values.kind = "cat"
+                        }}
+                      >
                         <SelectButton label="cat"/>
                       </div>
                     </div>
@@ -131,12 +176,6 @@ const Pets = () => {
           </div>
           </div>
         </div>
-        <p className="grid justify-center" onClick={() => {setCounter(counter + 1)}}>
-            {data.meta.page_count}
-          </p>
-          <p>
-            {counter}
-          </p>
       </div>
     )
   } else if (loading) {
