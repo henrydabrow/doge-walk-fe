@@ -30,6 +30,9 @@ module.exports = {
       animation: {
         wiggle: 'wiggle 1s ease-in-out 5s',
         shake: 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both'
+      },
+      height: {
+        xl: '400px'
       }
     },
   },
