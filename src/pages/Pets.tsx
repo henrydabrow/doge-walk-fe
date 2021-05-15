@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { getAccessToken } from '../accessToken';
 import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import Button from '../components/atoms/Button';
 import SelectButton from '../components/atoms/SelectButton';
 import InputField from '../components/atoms/InputField';
+import InputFieldError from '../components/atoms/InputFieldError';
 import DateSelector from '../components/molecules/DateSelector'
 
 const Pets = () => {
@@ -43,10 +45,18 @@ const Pets = () => {
     year: string;
   }
 
+  interface MappesPetFormValues {
+    name: string;
+    kind: string;
+    breed: string;
+    date: number;
+  }
+
   let history = useHistory();
   const accessToken = getAccessToken();
   const url = process.env.REACT_APP_API_BASE_URL + '/pets';
 
+  const [error, setError] = useState([]);
   const [loading, setLoading] = useState(true);
   const [kind, setKind] = useState('');
   const [data, setData] = useState<Data<Pet<Owner>,Meta>>({
@@ -78,7 +88,12 @@ const Pets = () => {
     })
   }, [])
 
-  const createPet = async (data: CreatePetFormValues) => {
+  const registrationSchema = Yup.object().shape({
+    name:
+      Yup.string().min(2, 'Too Short!').required('Name required!')
+  });
+
+  const createPet = async (data: MappesPetFormValues) => {
     const url = process.env.REACT_APP_API_BASE_URL + '/pets';
 
     const response = await fetch(url, {
@@ -91,10 +106,29 @@ const Pets = () => {
       body: JSON.stringify(data),
     }).then(res => res.json())
 
-    if (response) {
+    if (response.errors) {
+      setError(response.errors);
+    } else {
       history.go(0);
     }
     return response;
+  }
+
+  const createDate = (day: string, month: string, year: string) => {
+    const date = day + ' ' + month + ' ' + year;
+
+    return Date.parse(date);
+  }
+
+  const map_values = (values: CreatePetFormValues) => {
+    const date = createDate(values.day, values.month, values.year);
+
+    return {
+      name: values.name,
+      kind: values.kind,
+      breed: values.breed,
+      date: date / 1000 // division by 1000 because its returned in miliseconds
+    }
   }
 
   if (data.pets) {
@@ -117,22 +151,19 @@ const Pets = () => {
             {element}
           </div>
           <div className="grid justify-end col-span-5 mx-2">
-          <div className="my-10 max-w-sm h-xl overflow-auto block justify-center border-2 rounded-md bg-green-50 border-green-20">
-            <div className="mx-10">
+          <div className="m-auto my-10 max-w-sm overflow-auto block justify-center border-2 rounded-md bg-green-50 border-green-20">
+            <div className="mx-10 my-6">
               <h1 className="grid justify-center text-2xl my-6 font-mono text-purple-400">{"add pet"}</h1>
               <Formik
                 initialValues={initialValues}
                 onSubmit={(values: CreatePetFormValues) => {
-                  createPet(values)
+                  const mapped_values = map_values(values);
+                  createPet(mapped_values);
                 }}
+                validationSchema={registrationSchema}
               >
-                {({ handleChange, values }) => (
+                {({ errors, touched, handleChange, values }) => (
                   <Form>
-                    <InputField
-                      name='name'
-                      placeholder='name'
-                      opts={"border-green-400 w-72"}
-                    />
                     <div className="flex justify-between">
                       <div
                         onClick={() => {
@@ -154,17 +185,24 @@ const Pets = () => {
                       </div>
                     </div>
                     <InputField
+                      name='name'
+                      placeholder='name'
+                      opts={"border-green-400 w-72"}
+                    />
+                    {errors.name && touched.name ? <InputFieldError error={errors.name}/> : null}
+                    <InputField
                       name='breed'
                       placeholder='breed'
                       opts={"border-green-400 w-72"}
                     />
-                    <div>
-                      <DateSelector
-                        handleChange={handleChange}
-                        values={values.day}
-                        name='day'
-                        border={"border-red-400"}
-                      />
+                    <DateSelector
+                      handleChange={handleChange}
+                      values={values.day}
+                      name='day'
+                      border={"border-red-400"}
+                    />
+                    <div className="my-4">
+                      {error.map((err, index) => (<InputFieldError error={err} key={index}/>))}
                     </div>
                     <div className="my-6 mx-12">
                       <Button label="create"/>

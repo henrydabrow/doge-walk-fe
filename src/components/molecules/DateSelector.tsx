@@ -40,12 +40,13 @@ const DateSelector = ({
                     focus:border-red-400 focus:bg-red-100 focus:placeholder-gray-500 ` + border}
       >
         <option value="" label="day" className={"text-gray-500"}/>
-        { Array.from(Array(30).keys()).map((day) => {
+        { Array.from(Array(30).keys()).map((day) =>
           <option
             value={(day + 1).toString()}
             label={(day + 1).toString()}
-            key={(day + 1).toString()} />
-        })}
+            key={(day + 1).toString()}
+          />
+        )}
       </select>
     </div>
 
