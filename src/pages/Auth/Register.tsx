@@ -110,36 +110,31 @@ const Register = () => {
               {errors.passwordConfirmation && touched.passwordConfirmation ?
                 <InputFieldError error={errors.passwordConfirmation}/> : null}
               {error.map((err, index) => (<InputFieldError error={err} key={index}/>))}
-              <div className="mt-2 grid justify-center text-green-600">
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`h-6 w-6 ${expandForm && "hidden"}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    onMouseEnter={() => { setPlusTooltip(true) }}
-                    onMouseLeave={() => { setPlusTooltip(false) }}
-                    onClick={() => { setExpandForm(true)}}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <div className="grid justify-center text-green-500">
+                <div className={`h-6 w-6 border-2 rounded-md border-green-400 flex flex-wrap
+                  justify-center content-center ${expandForm && "hidden"}`}
+                  onMouseEnter={() => { setPlusTooltip(true) }}
+                  onMouseLeave={() => { setPlusTooltip(false) }}
+                  onClick={() => { setExpandForm(true)}}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                   </svg>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`h-6 w-6 ${!expandForm && "hidden"}`}
-                    fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    onMouseEnter={() => { setMinusTooltip(true) }}
-                    onMouseLeave={() => { setMinusTooltip(false) }}
-                    onClick={() => { setExpandForm(false)}}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </div>
+                <div className={`h-6 w-6 border-2 rounded-md border-green-400 flex flex-wrap
+                  justify-center content-center ${!expandForm && "hidden"}`}
+                  onMouseEnter={() => { setPlusTooltip(true) }}
+                  onMouseLeave={() => { setPlusTooltip(false) }}
+                  onClick={() => { setExpandForm(false)}}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4"/>
                   </svg>
                 </div>
               </div>
-              <div className="grid justify-center text-xs mt-2 font-mono text-gray-600">
-                {plusTooltip === true ? "expand registration form" : "" }
-                {minusTooltip === true ? "hide extended registration form" : "" }
+              <div className="grid justify-center text-xs font-mono text-gray-600">
+                  {plusTooltip === true ? <div className="mt-2">expand registration form</div> : null }
+                  {minusTooltip === true ? <div className="mt-2">hide extended registration form</div> : null }
               </div>
               {expandForm &&
                 <ExtendedRegistrationForm inputBorder={inputBorder} handleChange={handleChange} values={values} />}
