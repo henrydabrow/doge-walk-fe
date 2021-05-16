@@ -33,6 +33,9 @@ module.exports = {
       },
       height: {
         xl: '400px'
+      },
+      width: {
+        74: '300px'
       }
     },
   },
