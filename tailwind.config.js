@@ -32,7 +32,11 @@ module.exports = {
         shake: 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both'
       },
       height: {
-        xl: '400px'
+        xl: '400px',
+        81: '21rem'
+      },
+      width: {
+        74: '300px'
       }
     },
   },

@@ -1,77 +1,47 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
 import { getAccessToken } from '../accessToken';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import Button from '../components/atoms/Button';
-import SelectButton from '../components/atoms/SelectButton';
-import InputField from '../components/atoms/InputField';
-import InputFieldError from '../components/atoms/InputFieldError';
-import DateSelector from '../components/molecules/DateSelector'
+import CreatePetForm from '../components/forms/Pets/CreatePet';
+
+interface Data <P,M> {
+  pets: P[] | [];
+  meta: M;
+}
+
+interface Pet<O> {
+  id: string;
+  name: string;
+  kind: string;
+  breed: string;
+  owner: O;
+}
+
+interface Owner {
+  firstName: string;
+  city: string;
+}
+
+interface Meta {
+  count: string;
+  page: string;
+  per_page: string;
+  page_count: string;
+  total_count: string;
+}
 
 const Pets = () => {
-  interface Data <P,M> {
-    pets: P[] | [];
-    meta: M;
-  }
-
-  interface Pet<O> {
-    id: string;
-    name: string;
-    kind: string;
-    breed: string;
-    owner: O;
-  }
-
-  interface Owner {
-    firstName: string;
-    city: string;
-  }
-
-  interface Meta {
-    count: string;
-    page: string;
-    per_page: string;
-    page_count: string;
-    total_count: string;
-  }
-
-  interface CreatePetFormValues {
-    name: string;
-    kind: string;
-    breed: string;
-    day: string;
-    month: string;
-    year: string;
-  }
-
-  interface MappesPetFormValues {
-    name: string;
-    kind: string;
-    breed: string;
-    date: number;
-  }
-
-  let history = useHistory();
   const accessToken = getAccessToken();
   const url = process.env.REACT_APP_API_BASE_URL + '/pets';
 
-  const [error, setError] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [kind, setKind] = useState('');
   const [data, setData] = useState<Data<Pet<Owner>,Meta>>({
     pets: [{ id: '', name: '', kind: '', breed: '', owner: { firstName: '', city: ''} }],
     meta: { count: '', page: '', per_page: '', page_count: '', total_count: '' }
   });
-
-  const initialValues: CreatePetFormValues = {
-    name: '',
-    kind: kind,
-    breed: '',
-    day: '',
-    month: '',
-    year: '',
-  };
+  const [showPet, setShowPet] = useState(0);
+  const [toggle, setToggle] = useState(false);
+  const [currentPet, setCurrentPet] = useState<Pet<Owner>>({
+    id: '', name: '', kind: '', breed: '', owner: { firstName: '', city: ''}
+  })
 
   useEffect(() => {
     fetch(url,
@@ -86,59 +56,25 @@ const Pets = () => {
       setData(data);
       setLoading(false);
     })
-  }, [])
-
-  const registrationSchema = Yup.object().shape({
-    name:
-      Yup.string().min(2, 'Too Short!').required('Name required!')
-  });
-
-  const createPet = async (data: MappesPetFormValues) => {
-    const url = process.env.REACT_APP_API_BASE_URL + '/pets';
-
-    const response = await fetch(url, {
-      method: "POST",
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer:${accessToken}`
-      },
-      body: JSON.stringify(data),
-    }).then(res => res.json())
-
-    if (response.errors) {
-      setError(response.errors);
-    } else {
-      history.go(0);
-    }
-    return response;
-  }
-
-  const createDate = (day: string, month: string, year: string) => {
-    const date = day + ' ' + month + ' ' + year;
-
-    return Date.parse(date);
-  }
-
-  const map_values = (values: CreatePetFormValues) => {
-    const date = createDate(values.day, values.month, values.year);
-
-    return {
-      name: values.name,
-      kind: values.kind,
-      breed: values.breed,
-      date: date / 1000 // division by 1000 because its returned in miliseconds
-    }
-  }
+  }, [url, accessToken])
 
   if (data.pets) {
     const element = data.pets.map((pet: Pet<Owner>) => {
+      const message = <>
+        Hi my name is <b>{pet.name}</b>,
+        I am a <b>{pet.breed} {pet.kind}</b>.
+        My owner's name is <b>{pet.owner.firstName}</b>.
+      </>;
+
       return(
-        <div className="mx-2 h-36 border-2 border-purple-200 rounded-md">
-          <div className="m-2 text-xs font-mono">
-            <div key={pet.id}> Hi my name is <b>{pet.name}</b>, I am a {pet.breed} {pet.kind}.
-              My owner's name is {pet.owner.firstName} {"together we live in " && pet.owner.city }
-            </div>
+        <div
+          className={`h-${40 * 1} border-2 border-purple-200 rounded-md`}
+          onClick={() => {
+            setShowPet(1);
+            setCurrentPet(pet);
+        }}>
+          <div className="m-4 text-xs font-mono text-gray-700">
+            <div key={pet.id}>{message}</div>
           </div>
         </div>
       )
@@ -146,74 +82,50 @@ const Pets = () => {
 
     return(
       <div>
-        <div className="grid grid-cols-12 gap-3">
-          <div className="col-span-7 my-10 grid grid-cols-3 gap-2">
-            {element}
-          </div>
-          <div className="grid justify-end col-span-5 mx-2">
-          <div className="m-auto my-10 max-w-sm overflow-auto block justify-center border-2 rounded-md bg-green-50 border-green-20">
-            <div className="mx-10 my-6">
-              <h1 className="grid justify-center text-2xl my-6 font-mono text-purple-400">{"add pet"}</h1>
-              <Formik
-                initialValues={initialValues}
-                onSubmit={(values: CreatePetFormValues) => {
-                  const mapped_values = map_values(values);
-                  createPet(mapped_values);
-                }}
-                validationSchema={registrationSchema}
-              >
-                {({ errors, touched, handleChange, values }) => (
-                  <Form>
-                    <div className="flex justify-between">
-                      <div
-                        onClick={() => {
-                          setKind("dog")
-                          values.kind = "dog"
-                        }}
-                      >
-                        <SelectButton
-                          label="dog"
-                        />
-                      </div>
-                      <div
-                        onClick={() => {
-                          setKind("cat")
-                          values.kind = "cat"
-                        }}
-                      >
-                        <SelectButton label="cat"/>
-                      </div>
-                    </div>
-                    <InputField
-                      name='name'
-                      placeholder='name'
-                      opts={"border-green-400 w-72"}
-                    />
-                    {errors.name && touched.name ? <InputFieldError error={errors.name}/> : null}
-                    <InputField
-                      name='breed'
-                      placeholder='breed'
-                      opts={"border-green-400 w-72"}
-                    />
-                    <DateSelector
-                      handleChange={handleChange}
-                      values={values.day}
-                      name='day'
-                      border={"border-red-400"}
-                    />
-                    <div className="my-4">
-                      {error.map((err, index) => (<InputFieldError error={err} key={index}/>))}
-                    </div>
-                    <div className="my-6 mx-12">
-                      <Button label="create"/>
-                    </div>
-                  </Form>
-                )}
-              </Formik>
+        <div className="flex items-center justify-center w-full mb-12 mx-2 my-5">
+          <div className={`mr-3 text-gray-700 font-medium text-sm font-mono ${!toggle && "text-green-600"}`}>show pets</div>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative w-22 border-2 border-gray-200 rounded-md">
+              <div className="w-16 h-4 bg-gray-400 rounded-md shadow-inner m-2" onClick={() => {setToggle(!toggle)}} />
+              <div
+                className={`absolute w-6 h-6 bg-gray-100 rounded-md shadow -left-1 -top-1 m-2 transition
+                  ${toggle && "transform translate-x-12 bg-green-300"}
+                `}
+                onClick={() => {setToggle(!toggle)}}
+              ></div>
             </div>
-          </div>
-          </div>
+          </label>
+          <div className={`ml-3 text-gray-700 font-medium text-sm font-mono ${toggle && "text-green-600"}`}>add new pet</div>
         </div>
+
+        {
+          !toggle ?
+            <div className="grid grid-cols-4 gap-4 mx-2">
+              <div className={`col-span-${4 - showPet} grid grid-cols-${4 - showPet} gap-4`}>
+                {element}
+              </div>
+              <div className={`grid col-span-1 h-81 ${!showPet && "hidden"} `}>
+                <div className="border-2 border-purple-300 rounded-md">
+                  <div className="m-2 text-xs font-mono text-purple-700">
+                    <div className="flex justify-end">
+                      <div
+                        className="h-6 w-6 border-2 rounded-md border-purple-300 text-xl
+                          flex flex-wrap justify-center content-center"
+                        onClick={() => {setShowPet(0)}}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="mx-4"> Hello {currentPet.name} </div>
+                  </div>
+                </div>
+              </div>
+            </div> :
+            <CreatePetForm />
+        }
+
       </div>
     )
   } else if (loading) {

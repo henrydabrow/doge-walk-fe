@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-
 const Navbar = () => {
   const linkStyling = "p-2 border-2 border-purple-50 hover:border-purple-200 hover:text-gray-800 rounded-md";
   const [expanded, setExpanded] = useState(false);
