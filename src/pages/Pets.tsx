@@ -62,8 +62,8 @@ const Pets = () => {
     const element = data.pets.map((pet: Pet<Owner>) => {
       const message = <>
         Hi my name is <b>{pet.name}</b>,
-        I am a {pet.breed} {pet.kind}.
-        My owner's name is {pet.owner.firstName}
+        I am a <b>{pet.breed} {pet.kind}</b>.
+        My owner's name is <b>{pet.owner.firstName}</b>.
       </>;
 
       return(
@@ -104,7 +104,7 @@ const Pets = () => {
               <div className={`col-span-${4 - showPet} grid grid-cols-${4 - showPet} gap-4`}>
                 {element}
               </div>
-              <div className={`grid col-span-1 ${!showPet && "hidden"} `}>
+              <div className={`grid col-span-1 h-81 ${!showPet && "hidden"} `}>
                 <div className="border-2 border-purple-300 rounded-md">
                   <div className="m-2 text-xs font-mono text-purple-700">
                     <div className="flex justify-end">
