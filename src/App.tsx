@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import Navbar from './components/molecules/Navbar';
 import { setAccessToken } from './accessToken';
 import { Routes } from './Routes';
 
@@ -25,13 +27,18 @@ const App = () => {
       }
       setLoading(false);
     });
-  }, []);
+  }, [url]);
 
   if (loading) {
     return <div>loading...</div>;
   }
 
-  return <Routes />;
+  return (
+    <BrowserRouter>
+      <Navbar />
+      <Routes />
+    </BrowserRouter>
+  )
 }
 
 export default App;
