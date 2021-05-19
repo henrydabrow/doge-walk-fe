@@ -7,17 +7,22 @@ interface Data <P,M> {
   meta: M;
 }
 
-interface Pet<O> {
+interface Pet<O,I> {
   id: string;
   name: string;
   kind: string;
   breed: string;
+  image: I;
   owner: O;
 }
 
 interface Owner {
   firstName: string;
   city: string;
+}
+
+interface Image {
+  url: string;
 }
 
 interface Meta {
@@ -33,14 +38,21 @@ const Pets = () => {
   const url = process.env.REACT_APP_API_BASE_URL + '/pets';
 
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<Data<Pet<Owner>,Meta>>({
-    pets: [{ id: '', name: '', kind: '', breed: '', owner: { firstName: '', city: ''} }],
+  const [data, setData] = useState<Data<Pet<Owner, Image>,Meta>>({
+    pets: [{
+      id: '',
+      name: '',
+      kind: '',
+      breed: '',
+      image: { url: '' },
+      owner: { firstName: '', city: '' }
+    }],
     meta: { count: '', page: '', per_page: '', page_count: '', total_count: '' }
   });
   const [showPet, setShowPet] = useState(0);
   const [toggle, setToggle] = useState(false);
-  const [currentPet, setCurrentPet] = useState<Pet<Owner>>({
-    id: '', name: '', kind: '', breed: '', owner: { firstName: '', city: ''}
+  const [currentPet, setCurrentPet] = useState<Pet<Owner, Image>>({
+    id: '', name: '', kind: '', breed: '', image: { url: '' }, owner: { firstName: '', city: ''}
   })
 
   useEffect(() => {
@@ -53,14 +65,16 @@ const Pets = () => {
     )
     .then(res => res.json() || [])
     .then(data => {
+      console.log(data);
       setData(data);
       setLoading(false);
     })
   }, [url, accessToken])
 
   if (data.pets) {
-    const element = data.pets.map((pet: Pet<Owner>) => {
+    const element = data.pets.map((pet: Pet<Owner, Image>) => {
       const message = <>
+        <img></img>
         Hi my name is <b>{pet.name}</b>,
         I am a <b>{pet.breed} {pet.kind}</b>.
         My owner's name is <b>{pet.owner.firstName}</b>.
@@ -68,13 +82,25 @@ const Pets = () => {
 
       return(
         <div
-          className={`h-${40 * 1} border-2 border-purple-200 rounded-md`}
+          className={`h-auto border-2 border-purple-200 rounded-md`}
           onClick={() => {
             setShowPet(1);
             setCurrentPet(pet);
         }}>
           <div className="m-4 text-xs font-mono text-gray-700">
-            <div key={pet.id}>{message}</div>
+            {
+            pet.image ?
+              <div className="w-24 border-2 border-yellow-300 rounded-md p-1 bg-yellow-100">
+                <figure className="image is-5by4">
+                  <img src={pet.image.url} alt={pet.name} className="rounded-md shadow-inner h-20" />
+                </figure>
+              </div> :
+              <div></div>
+            }
+
+            <div className="my-3">
+              <div key={pet.id}>{message}</div>
+            </div>
           </div>
         </div>
       )
@@ -106,19 +132,32 @@ const Pets = () => {
               </div>
               <div className={`grid col-span-1 h-81 ${!showPet && "hidden"} `}>
                 <div className="border-2 border-purple-300 rounded-md">
-                  <div className="m-2 text-xs font-mono text-purple-700">
-                    <div className="flex justify-end">
-                      <div
-                        className="h-6 w-6 border-2 rounded-md border-purple-300 text-xl
-                          flex flex-wrap justify-center content-center"
-                        onClick={() => {setShowPet(0)}}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                  <div className="m-2 text-md font-mono text-purple-700">
+                    <div className="flex justify-between">
+                      <div className="mx-4"> Hello {currentPet.name} </div>
+                      <div className="flex justify-end ml-2">
+                        <div
+                          className="h-6 w-6 border-2 rounded-md border-purple-300 text-xl
+                            flex flex-wrap justify-center content-center"
+                          onClick={() => {setShowPet(0)}}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
-                    <div className="mx-4"> Hello {currentPet.name} </div>
+                    {
+                      currentPet.image ?
+                        <div className="border-2 border-yellow-300 rounded-md p-2 bg-yellow-100 m-2">
+                          <figure className="image is-5by4">
+                            <img src={currentPet.image.url} alt={currentPet.name} className="rounded-md shadow-inner" />
+                          </figure>
+                        </div> :
+                        <div></div>
+                      }
+
+                    <div className="mx-2 text-xs"> Hello {currentPet.name} </div>
                   </div>
                 </div>
               </div>
