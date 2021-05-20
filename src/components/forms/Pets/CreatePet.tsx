@@ -134,6 +134,15 @@ const CreatePetForm = () => {
                 name='day'
                 border={"border-red-400"}
               />
+              <div className="my-6">
+                <div className="w-74 h-20 border-2 border-dotted text-green-200 border-green-400 my-6 rounded-md grid justify-center bg-white ">
+                    <svg className="w-6 h-6 mt-3" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                    </svg>
+                    <input type="file" className="hidden" />
+                <p className="text-green-400">add</p>
+                </div>
+              </div>
               <div className="my-4">
                 {error.map((err, index) => (<InputFieldError error={err} key={index}/>))}
               </div>
