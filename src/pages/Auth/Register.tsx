@@ -16,8 +16,7 @@ const Register = () => {
   const [formColor, setFormColor] = useState("bg-yellow-50 border-yellow-200");
   const [inputBorder, setInputBorder] = useState("border-yellow-400");
   const [plusTooltip, setPlusTooltip] = useState(false);
-  const [minusTooltip, setMinusTooltip] = useState(false);
-  const [expandForm, setExpandForm] = useState(false);
+  const [expandedForm, setExpandedForm] = useState(false);
 
   interface RegisterFromValues {
     email: string;
@@ -112,20 +111,20 @@ const Register = () => {
               {error.map((err, index) => (<InputFieldError error={err} key={index}/>))}
               <div className="grid justify-center text-green-500">
                 <div className={`h-6 w-6 border-2 rounded-md border-green-400 flex flex-wrap
-                  justify-center content-center ${expandForm && "hidden"}`}
+                  justify-center content-center ${expandedForm && "hidden"}`}
                   onMouseEnter={() => { setPlusTooltip(true) }}
                   onMouseLeave={() => { setPlusTooltip(false) }}
-                  onClick={() => { setExpandForm(true)}}
+                  onClick={() => { setExpandedForm(true)}}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                   </svg>
                 </div>
                 <div className={`h-6 w-6 border-2 rounded-md border-green-400 flex flex-wrap
-                  justify-center content-center ${!expandForm && "hidden"}`}
+                  justify-center content-center ${!expandedForm && "hidden"}`}
                   onMouseEnter={() => { setPlusTooltip(true) }}
                   onMouseLeave={() => { setPlusTooltip(false) }}
-                  onClick={() => { setExpandForm(false)}}
+                  onClick={() => { setExpandedForm(false)}}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4"/>
@@ -133,11 +132,10 @@ const Register = () => {
                 </div>
               </div>
               <div className="grid justify-center text-xs font-mono text-gray-600">
-                  {plusTooltip === true ? <div className="mt-2">expand registration form</div> : null }
-                  {minusTooltip === true ? <div className="mt-2">hide extended registration form</div> : null }
+                  {plusTooltip && !expandedForm ? <div className="mt-2">expand registration form</div> : null }
+                  {plusTooltip && expandedForm ? <div className="mt-2">hide extended registration form</div> : null }
               </div>
-              {expandForm &&
-                <ExtendedRegistrationForm inputBorder={inputBorder} handleChange={handleChange} values={values} />}
+              {expandedForm && <ExtendedRegistrationForm inputBorder={inputBorder} handleChange={handleChange} values={values} />}
               <div className="my-6 mx-7">
                 <Button label="register"/>
               </div>
