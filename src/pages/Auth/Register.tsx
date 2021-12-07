@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { RegisterRequest } from '../../api/Auth/Register';
@@ -10,7 +10,7 @@ import InputFieldError from '../../components/atoms/InputFieldError';
 import { setAccessToken } from '../../accessToken';
 
 const Register = () => {
-  let history = useHistory();
+  let navigate = useNavigate();
   const [error, setError] = useState([]);
   const [formAnimation, setFormAnimation] = useState(false);
   const [formColor, setFormColor] = useState("bg-yellow-50 border-yellow-200");
@@ -69,7 +69,7 @@ const Register = () => {
     } else {
       setAccessToken(response.token);
       sessionStorage.setItem('isAuth', 'true');
-      history.push('/pets');
+      navigate('/pets');
       resetForm({});
     }
   }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/molecules/Navbar';
 import { setAccessToken } from './accessToken';
-import { Routes } from './Routes';
+import Routes from './Routes';
 
 const App = () => {
   const url = process.env.REACT_APP_API_BASE_URL + '/auth/refresh';

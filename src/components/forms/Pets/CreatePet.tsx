@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAccessToken } from '../../../accessToken';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -26,7 +26,7 @@ interface MappesPetFormValues {
 }
 
 const CreatePetForm = () => {
-  let history = useHistory();
+  let navigate = useNavigate();
   const accessToken = getAccessToken();
   const [error, setError] = useState([]);
   const [kind, setKind] = useState('');
@@ -61,7 +61,7 @@ const CreatePetForm = () => {
     if (response.errors) {
       setError(response.errors);
     } else {
-      history.go(0);
+      navigate(0);
     }
     return response;
   }
