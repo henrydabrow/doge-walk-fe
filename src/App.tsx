@@ -29,10 +29,6 @@ const App = () => {
     });
   }, [url]);
 
-  if (loading) {
-    return <div>loading...</div>;
-  }
-
   return (
     <BrowserRouter>
       <Navbar />
